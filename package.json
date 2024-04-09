@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.10",
+    "@vercel/speed-insights": "^1.0.10",
     "axios": "^1.6.8",
     "axios-cache-interceptor": "^1.5.1",
     "country-locale-map": "^1.9.4",

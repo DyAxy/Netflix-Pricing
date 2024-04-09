@@ -11,10 +11,11 @@ import Loading from "./Loading";
 import Header from './Header';
 import Content from './Content';
 import Footer from './Footer';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const fetchData = async () => {
   const request = axios.create({
-    baseURL: 'https://nf.dy.ax'
+    baseURL: ''
   })
   const cached = setupCache(request, {
     storage: buildMemoryStorage(true, 23 * 60 * 60 * 1000)
@@ -93,6 +94,7 @@ export default function Home() {
 
   return (
     <div>
+      <SpeedInsights/>
       <Header />
       <Spacer y={4} />
       <Content data={data} rate={rate ? rate : { 'USD': 1 }} />
