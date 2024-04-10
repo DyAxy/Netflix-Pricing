@@ -49,7 +49,7 @@ export default function Content() {
             ...item,
             key: i.toString()
         })) || []
-    }, [data?.data?.result, currency, rate]);
+    }, [data?.data?.result, rate?.data]);
 
     const pages = React.useMemo(() => {
         return data?.data?.count ? Math.ceil(data.data.count / rowsPerPage) : 0;
@@ -62,7 +62,7 @@ export default function Content() {
         key && key.toString() !== currency && setCurrency(key.toString());
     };
     const convertCurrency = (amount: number, fromCurrency: string, toCurrency: string): string => {
-        const conversionRate = rate.data[toCurrency] / rate.data[fromCurrency];
+        const conversionRate = rate?.data[toCurrency] / rate?.data[fromCurrency];
         return isNaN(conversionRate) ? 'N/A' : (amount * conversionRate).toFixed(2);
     };
 
