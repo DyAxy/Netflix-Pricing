@@ -1,6 +1,7 @@
 import { Autocomplete, AutocompleteItem, Card, CardBody, CardHeader, Image, Pagination, Select, SelectItem, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User, getKeyValue } from "@nextui-org/react";
 import clm from 'country-locale-map';
 import React from "react";
+import useSWR from "swr";
 
 interface DataItem {
     key: string;
@@ -15,17 +16,16 @@ interface Rate {
     [currencyCode: string]: number;
 }
 
-import useSWR from "swr";
 const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 const url: string = 'https://api.dy.ax/v1/finance'
-function getRate() {
+function useRate() {
     const { data, isLoading } = useSWR(`${url}/rateall`, fetcher);
     return {
         rate: data,
         isRateLoading: isLoading
     }
 }
-function getPage(p: number) {
+function usePage(p: number) {
     const { data, isLoading } = useSWR(
         `${url}/netflixchange?page=${p}&per_page=10`, fetcher, {
         keepPreviousData: true,
@@ -40,8 +40,8 @@ export default function Content() {
     const [currency, setCurrency] = React.useState<string>('USD');
     const [page, setPage] = React.useState(1);
     const rowsPerPage = 10;
-    const { rate, isRateLoading } = getRate()
-    const { data, isDataLoading } = getPage(page)
+    const { rate, isRateLoading } = useRate()
+    const { data, isDataLoading } = usePage(page)
 
 
     const items = React.useMemo(() => {
