@@ -1,58 +1,81 @@
-import { Autocomplete, AutocompleteItem, Card, CardBody, CardHeader, Image, Pagination, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from "@nextui-org/react";
-import { columns } from "./data";
+import { Autocomplete, AutocompleteItem, Card, CardBody, CardHeader, Image, Pagination, Select, SelectItem, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User, getKeyValue } from "@nextui-org/react";
 import clm from 'country-locale-map';
 import React from "react";
 
 interface DataItem {
     key: string;
-    name: string; // 国家代码
+    code: string; // 国家代码
     currency: string; // 货币代码
     plan: string; // 计划类型
     old: number; // 旧价格
     new: number; // 新价格
-    date: string; // 日期
+    updateTime: string; // 日期
 }
 interface Rate {
     [currencyCode: string]: number;
 }
-interface ContentProps {
-    data: DataItem[];
-    rate: Rate;
+
+import useSWR from "swr";
+const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
+const url: string = 'https://api.dy.ax/v1/finance'
+function getRate() {
+    const { data, isLoading } = useSWR(`${url}/rateall`, fetcher);
+    return {
+        rate: data,
+        isRateLoading: isLoading
+    }
+}
+function getPage(p: number) {
+    const { data, isLoading } = useSWR(
+        `${url}/netflixchange?page=${p}&per_page=10`, fetcher, {
+        keepPreviousData: true,
+    });
+    return {
+        data: data,
+        isDataLoading: isLoading
+    }
 }
 
-export default function Content({ data, rate }: ContentProps) {
-    const [page, setPage] = React.useState(1);
+export default function Content() {
     const [currency, setCurrency] = React.useState<string>('USD');
+    const [page, setPage] = React.useState(1);
+    const rowsPerPage = 10;
+    const { rate, isRateLoading } = getRate()
+    const { data, isDataLoading } = getPage(page)
+
+
+    const items = React.useMemo(() => {
+        return data?.data?.result.map((item: any, i: number) => ({
+            ...item,
+            key: i.toString()
+        })) || []
+    }, [data?.data?.result, currency]);
+
+    const pages = React.useMemo(() => {
+        return data?.data?.count ? Math.ceil(data.data.count / rowsPerPage) : 0;
+    }, [data?.data?.count, rowsPerPage]);
+
+    const loadingState = isRateLoading || isDataLoading ? "loading" : "idle";
+    const noData = typeof data?.data === 'string' ? true : false
 
     const onSelectionChange = (key: React.Key) => {
         key && key.toString() !== currency && setCurrency(key.toString());
     };
-
     const convertCurrency = (amount: number, fromCurrency: string): string => {
-        const conversionRate = rate[currency] / rate[fromCurrency];
+        const conversionRate = rate?.data[currency] / rate?.data[fromCurrency];
         return isNaN(conversionRate) ? 'N/A' : (amount * conversionRate).toFixed(2);
     };
 
-    const rowsPerPage = 6;
-    const pages = Math.ceil(data.length / rowsPerPage);
-    const items = React.useMemo(() => {
-        const start = (page - 1) * rowsPerPage;
-        const end = start + rowsPerPage;
-        return data.slice(start, end).map(item => ({
-            ...item
-        }));
-    }, [page, data, currency]); // 添加currency作为依赖
-
     const renderCell = (item: any, columnKey: any) => {
         switch (columnKey) {
-            case "name":
-                const country = clm.getCountryByAlpha2(item.name)
+            case "code":
+                const country = clm.getCountryByAlpha2(item.code)
                 return (
                     <User
                         name={country?.alpha3 || 'UNK'}
                         description={item.plan}
                         avatarProps={{
-                            size:"sm",
+                            size: "sm",
                             isBordered: true,
                             src: `https://cdn.jsdelivr.net/npm/round-flags@1.0.2/flags/${country?.alpha2}.svg`
                         }}
@@ -74,55 +97,67 @@ export default function Content({ data, rate }: ContentProps) {
     }
 
     return (
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <Card>
-                <CardHeader className="justify-end">
-                    <Autocomplete
-                        size='sm'
-                        variant='bordered'
-                        label={`Convert to: `}
-                        className="max-w-xs"
-                        defaultSelectedKey={currency}
-                        labelPlacement="outside-left"
-                        onSelectionChange={onSelectionChange}
-                    >
-                        {Object.keys(rate).map(key => (
-                            <AutocompleteItem className='text-foreground' key={key} value={key}>
-                                {key}
-                            </AutocompleteItem>
-                        ))}
-                    </Autocomplete>
-                </CardHeader>
-                <CardBody>
-                    <Table
-                        isStriped
-                        aria-label='test'
-                        bottomContent={
+        <Card style={{ maxWidth: '800px', margin: '0 auto' }}>
+            <CardHeader className="justify-end">
+                <Autocomplete
+                    size='sm'
+                    variant='bordered'
+                    label={`Convert to: `}
+                    className="max-w-xs"
+                    defaultSelectedKey={currency}
+                    labelPlacement="outside-left"
+                    onSelectionChange={onSelectionChange}
+                    isDisabled={loadingState == 'loading' || noData}
+                >
+                    {Object.keys(rate?.data || {}).map(key => (
+                        <AutocompleteItem className='text-foreground' key={key} value={key}>
+                            {key}
+                        </AutocompleteItem>
+                    ))}
+                </Autocomplete>
+            </CardHeader>
+            <CardBody>
+                <Table
+                    isStriped
+                    aria-label="Example table with client async pagination"
+                    bottomContent={
+                        pages > 0 ? (
                             <div className="flex w-full justify-center">
                                 <Pagination
                                     isCompact
                                     showControls
                                     showShadow
+                                    color="primary"
                                     page={page}
                                     total={pages}
                                     onChange={(page) => setPage(page)}
                                 />
-                            </div>} >
-                        <TableHeader columns={columns}>
-                            {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-                        </TableHeader>
-                        <TableBody
-                            items={items}
-                        >
-                            {(item: any) => (
-                                <TableRow key={item.id}>
-                                    {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </CardBody>
-            </Card>
-        </div >
+                            </div>
+                        ) : null
+                    }
+
+                >
+                    <TableHeader>
+                        <TableColumn key="code">Country</TableColumn>
+                        <TableColumn key="old">Old Price</TableColumn>
+                        <TableColumn key="new">New Price</TableColumn>
+                        <TableColumn key="updateTime">Date</TableColumn>
+                    </TableHeader>
+                    <TableBody
+                        items={items}
+                        loadingContent={<Spinner />}
+                        loadingState={loadingState}
+                        emptyContent={noData ? 'No Data to display.' : ''}
+                    >
+                        {(item: any) => (
+                            <TableRow key={item?.key}>
+                                {(columnKey) => <TableCell>{renderCell(item, columnKey)}</TableCell>}
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </CardBody>
+        </Card>
+
     );
-};
+}
