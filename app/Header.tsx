@@ -1,4 +1,4 @@
-import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Switch } from "@nextui-org/react";
+import { Link, Navbar, NavbarBrand, NavbarContent, NavbarItem, Switch } from "@nextui-org/react";
 import { SunIcon } from "./SunIcon";
 import { MoonIcon } from "./MoonIcon";
 import { ThemeProvider, useTheme } from "next-themes";
@@ -28,8 +28,18 @@ export default function Content() {
             <Navbar shouldHideOnScroll isBordered>
                 <NavbarContent>
                     <NavbarBrand>
-                        <p className="font-bold">Netflix Pricing Changelog</p>
+                        <p className="font-bold">Netflix Pricing</p>
                     </NavbarBrand>
+                    <NavbarItem>
+                        <Link color="foreground" href="/">
+                            Home
+                        </Link>
+                    </NavbarItem>
+                    <NavbarItem>
+                        <Link color="foreground" href="/changelog">
+                            Changelog
+                        </Link>
+                    </NavbarItem>
                 </NavbarContent>
                 <NavbarContent justify="end">
                     <NavbarItem>
