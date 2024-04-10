@@ -49,7 +49,7 @@ export default function Content() {
             ...item,
             key: i.toString()
         })) || []
-    }, [data?.data?.result, currency]);
+    }, [data?.data?.result, currency, rate]);
 
     const pages = React.useMemo(() => {
         return data?.data?.count ? Math.ceil(data.data.count / rowsPerPage) : 0;
@@ -61,8 +61,8 @@ export default function Content() {
     const onSelectionChange = (key: React.Key) => {
         key && key.toString() !== currency && setCurrency(key.toString());
     };
-    const convertCurrency = (amount: number, fromCurrency: string): string => {
-        const conversionRate = rate.data[currency] / rate.data[fromCurrency];
+    const convertCurrency = (amount: number, fromCurrency: string, toCurrency: string): string => {
+        const conversionRate = rate.data[toCurrency] / rate.data[fromCurrency];
         return isNaN(conversionRate) ? 'N/A' : (amount * conversionRate).toFixed(2);
     };
 
@@ -84,7 +84,7 @@ export default function Content() {
             case "old":
             case "new":
                 const cellValue = item[columnKey];
-                const convertedValue = convertCurrency(cellValue, item.currency);
+                const convertedValue = convertCurrency(cellValue, item.currency, currency);
                 return (
                     <div className="flex flex-col">
                         <p className="text-bold text-sm capitalize">{`${item.currency} ${cellValue}`}</p>
