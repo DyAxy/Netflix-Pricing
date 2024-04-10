@@ -49,7 +49,7 @@ export default function Content() {
             ...item,
             key: i.toString()
         })) || []
-    }, [data?.data?.result, rate?.data]);
+    }, [data?.data?.result, rate?.data, currency]);
 
     const pages = React.useMemo(() => {
         return data?.data?.count ? Math.ceil(data.data.count / rowsPerPage) : 0;
