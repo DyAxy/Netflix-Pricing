@@ -1,6 +1,6 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem, Card, CardBody, CardFooter, CardHeader, Image, Pagination, Select, SelectItem, Spacer, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User, getKeyValue } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Card, CardBody, CardFooter, CardHeader, Image, Pagination, Select, SelectItem, Spacer, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User, getKeyValue } from "@nextui-org/react";
 import clm from 'country-locale-map';
 import React from "react";
 import useSWR from "swr";
@@ -42,7 +42,7 @@ export default function Content() {
     const [currency, setCurrency] = React.useState<string>('USD');
     const [page, setPage] = React.useState(1);
     const [row, setRow] = React.useState(10);
-    
+
     const { rate, isRateLoading } = useRate()
     const { data, isDataLoading } = usePage(page)
 
@@ -69,24 +69,24 @@ export default function Content() {
         return isNaN(conversionRate) ? 'N/A' : (amount * conversionRate).toFixed(2);
     };
     const cardHeader = React.useMemo(() => {
-      return (
-        <Autocomplete
-          size='sm'
-          variant='bordered'
-          label={`Convert to: `}
-          className="max-w-xs"
-          defaultSelectedKey={currency}
-          labelPlacement="outside-left"
-          onSelectionChange={onSelectionChange}
-          isDisabled={loadingState == 'loading' || noData}
-        >
-          {Object.keys(rate?.data || {}).map(key => (
-            <AutocompleteItem className='text-foreground' key={key} value={key}>
-              {key}
-            </AutocompleteItem>
-          ))}
-        </Autocomplete>
-      )
+        return (
+            <Autocomplete
+                size='sm'
+                variant='bordered'
+                label={`Convert to: `}
+                className="max-w-xs"
+                defaultSelectedKey={currency}
+                labelPlacement="outside-left"
+                onSelectionChange={onSelectionChange}
+                isDisabled={loadingState == 'loading' || noData}
+            >
+                {Object.keys(rate?.data || {}).map(key => (
+                    <AutocompleteItem className='text-foreground' key={key} value={key}>
+                        {key}
+                    </AutocompleteItem>
+                ))}
+            </Autocomplete>
+        )
     }, [rate?.data, loadingState, noData])
     const cardFooter = React.useMemo(() => {
         return (
@@ -109,15 +109,17 @@ export default function Content() {
             case "code":
                 const country = clm.getCountryByAlpha2(item.code)
                 return (
-                    <User
-                        name={country?.alpha3 || 'UNK'}
-                        description={item.plan}
-                        avatarProps={{
-                            size: "sm",
-                            isBordered: true,
-                            src: `https://cdn.jsdelivr.net/npm/round-flags@1.0.2/flags/${country?.alpha2}.svg`
-                        }}
-                    />
+                    <Tooltip content={country?.name}>
+                        <User
+                            name={country?.alpha3 || 'UNK'}
+                            description={item.plan}
+                            avatarProps={{
+                                size: "sm",
+                                isBordered: true,
+                                src: `https://cdn.jsdelivr.net/npm/round-flags@1.0.2/flags/${country?.alpha2}.svg`
+                            }}
+                        />
+                    </Tooltip>
                 );
             case "old":
             case "new":

@@ -1,6 +1,6 @@
 "use client";
 
-import { Autocomplete, AutocompleteItem, Card, CardBody, CardFooter, CardHeader, Input, Pagination, Spacer, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, User } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Card, CardBody, CardFooter, CardHeader, Input, Pagination, Spacer, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, User } from "@nextui-org/react";
 import clm from 'country-locale-map';
 import React from "react";
 import useSWR from "swr";
@@ -91,14 +91,16 @@ export default function Home() {
       case "code":
         const country = clm.getCountryByAlpha2(item.code)
         return (
-          <User
-            name={country?.alpha3 || 'UNK'}
-            avatarProps={{
-              size: "sm",
-              isBordered: true,
-              src: `https://cdn.jsdelivr.net/npm/round-flags@1.0.2/flags/${country?.alpha2}.svg`
-            }}
-          />
+          <Tooltip content={country?.name}>
+            <User
+              name={country?.alpha3 || 'UNK'}
+              avatarProps={{
+                size: "sm",
+                isBordered: true,
+                src: `https://cdn.jsdelivr.net/npm/round-flags@1.0.2/flags/${country?.alpha2}.svg`
+              }}
+            />
+          </Tooltip>
         );
       case "Basic":
       case "Mobile":
