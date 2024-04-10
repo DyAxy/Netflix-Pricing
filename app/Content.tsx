@@ -62,7 +62,7 @@ export default function Content() {
         key && key.toString() !== currency && setCurrency(key.toString());
     };
     const convertCurrency = (amount: number, fromCurrency: string): string => {
-        const conversionRate = rate?.data[currency] / rate?.data[fromCurrency];
+        const conversionRate = rate.data[currency] / rate.data[fromCurrency];
         return isNaN(conversionRate) ? 'N/A' : (amount * conversionRate).toFixed(2);
     };
 
