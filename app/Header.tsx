@@ -41,8 +41,10 @@ function CustomNavbarItem({ children, href }: Props) {
 export default function Content() {
     const { theme, systemTheme, setTheme } = useTheme()
     const isSelected = React.useMemo(() => {
+        console.log(theme, systemTheme)
         if (theme != 'system' && systemTheme == theme) setTheme('system')
         if ((theme == 'system' && systemTheme == 'light') || theme == 'light') return true
+        return false
     }, [theme, systemTheme])
 
     const onValueChange = (value: boolean) => setTheme(value ? 'light' : 'dark')
