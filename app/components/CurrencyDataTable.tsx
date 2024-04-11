@@ -16,7 +16,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
     const [page, setPage] = useState(1);
     const [row, setRow] = useState(10);
 
-    const { data: rate, isLoading: isRateLoading } = useSWR(`${url}/rateall`, fetcher); 
+    const { data: rate, isLoading: isRateLoading } = useSWR(`${url}/rateall`, fetcher);
     const { data, isLoading } = useSWR(`${url}/${usePage ? path + page : path}`, fetcher);
 
     const pages = useMemo(() => {
@@ -88,6 +88,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
                         items={items}
                         loadingContent={<Spinner />}
                         loadingState={loadingState}
+                        emptyContent={items.length == 0 ? 'No Data to display.' : ''}
                     >
                         {(item: any) => (
                             <TableRow key={item?.key}>

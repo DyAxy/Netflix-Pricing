@@ -5,7 +5,7 @@ import { SunIcon } from "./SunIcon";
 import { MoonIcon } from "./MoonIcon";
 import { useTheme } from "next-themes";
 import { usePathname } from 'next/navigation'
-import React from "react";
+import { useMemo } from "react";
 
 const navbarItemStyles = [
     "flex",
@@ -40,8 +40,7 @@ function CustomNavbarItem({ children, href }: Props) {
 
 export default function Content() {
     const { theme, systemTheme, setTheme } = useTheme()
-    const isSelected = React.useMemo(() => {
-        console.log(theme, systemTheme)
+    const isSelected = useMemo(() => {
         if (theme != 'system' && systemTheme == theme) setTheme('system')
         if ((theme == 'system' && systemTheme == 'light') || theme == 'light') return true
         return false
