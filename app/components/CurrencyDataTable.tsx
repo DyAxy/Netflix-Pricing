@@ -39,7 +39,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
 
     const loadingState = isRateLoading || isLoading ? 'loading' : 'idle';
 
-    const cardHeader = useMemo(() => {
+    const cardHeaderCurrency = useMemo(() => {
         return (
             <Autocomplete
                 size='sm'
@@ -77,7 +77,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
 
     return (
         <Card style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <CardHeader className="justify-end">{cardHeader}</CardHeader>
+            <CardHeader className="justify-end">{cardHeaderCurrency}</CardHeader>
             <CardBody>
                 <Table
                     isStriped
@@ -88,7 +88,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
                         items={items}
                         loadingContent={<Spinner />}
                         loadingState={loadingState}
-                        emptyContent={items.length == 0 ? 'No Data to display.' : ''}
+                        emptyContent={(loadingState != 'loading' && items.length == 0) ? 'No Data to display.' : ''}
                     >
                         {(item: any) => (
                             <TableRow key={item?.key}>

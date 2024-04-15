@@ -5,13 +5,16 @@ import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import Header from './Header';
 import Footer from './Footer';
+import { useRouter } from 'next/navigation'
+
 import {
   Spacer
 } from '@nextui-org/react';
 
 export function Providers({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
   return (
-    <NextUIProvider>
+    <NextUIProvider navigate={router.push}>
       <NextThemesProvider>
         <div className="text-foreground bg-background" >
           <SpeedInsights />
