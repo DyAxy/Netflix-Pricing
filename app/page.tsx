@@ -1,43 +1,25 @@
 "use client";
 
-import { TableColumn, TableHeader, Tooltip, User } from "@nextui-org/react";
-import clm from 'country-locale-map';
+import { TableColumn, TableHeader } from "@nextui-org/react";
 import React from "react";
-import CurrencyDataTable from "./components/CurrencyDataTable";
+import CurrencyDataTable from "@/app/components/CurrencyDataTable";
+import TooltipCountry from "@/app/components/TooltipCountry";
 
 export default function Home() {
   const renderCell = (item: any, columnKey: any, rate: any, toCurrency: string) => {
-    const convertCurrency = (amount: number, fromCurrency: string, toCurrency: string): string => {
-      if (!amount) return ''
-      const conversionRate = rate?.data[toCurrency] / rate?.data[fromCurrency];
-      return isNaN(conversionRate) ? 'N/A' : (amount * conversionRate).toFixed(2);
-    };
     switch (columnKey) {
       case "code":
-        const country = clm.getCountryByAlpha2(item.code)
-        return (
-          <Tooltip content={country?.name} placement="right">
-            <User
-              name={country?.alpha3 || 'UNK'}
-              avatarProps={{
-                size: "sm",
-                isBordered: true,
-                src: `https://cdn.jsdelivr.net/npm/round-flags@1.0.2/flags/${country?.alpha2}.svg`
-              }}
-            />
-          </Tooltip>
-        );
+        return <TooltipCountry iso2={item.code} />
       case "Basic":
       case "Mobile":
       case "Premium":
       case "Standard":
       case "Standard with ads":
         const cellValue = item[columnKey] || '';
-        const convertedValue = convertCurrency(cellValue, item.Currency, toCurrency);
         return (
           <div className="flex flex-col">
             <p className="text-bold text-sm capitalize">{cellValue ? `${item.Currency} ${cellValue}` : ''}</p>
-            <p className="text-bold text-sm capitalize text-default-400">{convertedValue ? `${toCurrency} ${convertedValue}` : ''}</p>
+            <p className="text-bold text-sm capitalize text-default-400">{cellValue ? `${toCurrency} ${item[columnKey+'_converted']}` : ''}</p>
           </div>
         );
       default:
