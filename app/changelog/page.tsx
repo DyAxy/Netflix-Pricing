@@ -25,7 +25,7 @@ export default function Content() {
     }
 
     return (
-        <CurrencyDataTable path='netflixchange?per_page=10&page=' usePage={true} tableHeader={
+        <CurrencyDataTable path='netflixchange?apiKey=1&per_page=10&page=' usePage={true} tableHeader={
             <TableHeader>
                 <TableColumn key="code">Country</TableColumn>
                 <TableColumn key="old">Old Price</TableColumn>

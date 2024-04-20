@@ -27,7 +27,7 @@ export default function Home() {
     }
   }
   return (
-    <CurrencyDataTable path='netflix' usePage={false} tableHeader={
+    <CurrencyDataTable path='netflix?apiKey=1' usePage={false} tableHeader={
       <TableHeader>
         <TableColumn key="code">Country</TableColumn>
         <TableColumn key="Mobile">Mobile</TableColumn>

@@ -19,7 +19,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
     const [row, setRow] = useState(10);
     const [pages, setPages] = useState(0);
 
-    const { data: rate, isLoading: isRateLoading } = useSWR(`${url}/rateall`, fetcher);
+    const { data: rate, isLoading: isRateLoading } = useSWR(`${url}/rateall?apiKey=1`, fetcher);
     const { data, isLoading } = useSWR(`${url}/${usePage ? path + page : path}`, fetcher);
 
     useEffect(() => {
@@ -74,7 +74,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
                 size='sm'
                 className="w-full sm:max-w-[30%]"
                 placeholder="Search by country code..."
-                // startContent={<SearchIcon />}
+                variant="bordered"
                 value={filterValue}
                 onClear={() => onClear()}
                 onValueChange={onSearchChange}
