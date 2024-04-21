@@ -3,6 +3,7 @@
 import { NextUIProvider } from '@nextui-org/react'
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import { Analytics } from "@vercel/analytics/react"
 import Header from './Header';
 import Footer from './Footer';
 import { useRouter } from 'next/navigation'
@@ -18,6 +19,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <NextThemesProvider>
         <div className="text-foreground bg-background" >
           <SpeedInsights />
+          <Analytics />
           <Header />
           <Spacer y={4} />
           {children}
