@@ -1,4 +1,7 @@
-import { Autocomplete, AutocompleteItem } from "@nextui-org/react"
+import { 
+    Autocomplete, 
+    AutocompleteItem 
+} from "@nextui-org/react"
 import { Key } from "react";
 
 export default function CardCurrency({ rate, currency, onSelectionChange }: {

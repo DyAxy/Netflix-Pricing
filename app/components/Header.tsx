@@ -1,6 +1,13 @@
 "use client";
 
-import { Link, Navbar, NavbarBrand, NavbarContent, NavbarItem, Switch } from "@nextui-org/react";
+import { 
+    Link,
+    Navbar,
+    NavbarBrand,
+    NavbarContent,
+    NavbarItem,
+    Switch
+} from "@nextui-org/react";
 import { SunIcon } from "./SunIcon";
 import { MoonIcon } from "./MoonIcon";
 import { useTheme } from "next-themes";

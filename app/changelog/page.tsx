@@ -1,6 +1,9 @@
 "use client";
 
-import { TableColumn, TableHeader } from "@nextui-org/react";
+import { 
+    TableColumn,
+    TableHeader 
+} from "@nextui-org/react";
 import React from "react";
 import CurrencyDataTable from "@/app/components/CurrencyDataTable";
 import TooltipCountry from "@/app/components/TooltipCountry";

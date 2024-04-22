@@ -1,5 +1,22 @@
-import { Autocomplete, AutocompleteItem, Card, CardBody, CardFooter, CardHeader, Input, Pagination, Spacer, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableHeaderProps, TableRow, getKeyValue } from "@nextui-org/react";
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import { 
+    Card, 
+    CardBody, 
+    CardFooter, 
+    CardHeader, 
+    Input, 
+    Spacer, 
+    Spinner, 
+    Table, 
+    TableBody, 
+    TableCell, 
+    TableRow
+} from "@nextui-org/react";
+import { 
+    useCallback, 
+    useEffect, 
+    useMemo, 
+    useState
+} from "react";
 import useSWR from "swr";
 import CardPage from "@/app/components/CardPage";
 import CardCurrency from "@/app/components/CardCurrency";
@@ -69,7 +86,7 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
         return usePage ? null : (
             <Input
                 isDisabled={!data}
-                label="Country code"
+                label="ISO 3166-2 Code"
                 isClearable
                 size='sm'
                 className="w-full sm:max-w-[30%]"
