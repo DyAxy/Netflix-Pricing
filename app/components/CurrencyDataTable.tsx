@@ -106,8 +106,8 @@ export default function CurrencyDataTable({ path, usePage, tableHeader, renderCe
             filteredUsers = filteredUsers.filter((item) =>
                 item.code.toLowerCase().includes(filterValue.toLowerCase()),
             );
-            setPages(Math.ceil(filteredUsers.length / row))
         }
+        setPages(Math.ceil(filteredUsers.length / row))
         const start = (page - 1) * row;
         const end = start + row;
         return filteredUsers.slice(start, end).map((item: any, index: number) => {
