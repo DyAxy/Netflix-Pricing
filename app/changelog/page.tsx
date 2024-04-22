@@ -12,7 +12,7 @@ export default function Content() {
     const renderCell = (item: any, columnKey: any, rate: any, toCurrency: string) => {
         switch (columnKey) {
             case "code":
-                return <TooltipCountry iso2={item.code} />
+                return <TooltipCountry iso2={item.code} desc={item.plan}/>
             case "old":
             case "new":
                 const cellValue = item[columnKey];

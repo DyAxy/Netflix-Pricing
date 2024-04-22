@@ -6,7 +6,7 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Netflix Pricing Page",
+  title: "Netflix Pricing",
   description: "Display the prices and price changes for all Netflix regions.",
   keywords: 'Netflix Pricing, Netflix API, All Netflix Regions'
 };
